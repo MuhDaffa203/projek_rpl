@@ -21,11 +21,12 @@ WORKDIR /app
 # Salin seluruh project
 COPY . .
 
-# 🔥 FIX UTAMA: Buat folder storage dan bootstrap
-RUN mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+# Buat folder storage dan bootstrap/cache + set permission & owner
+RUN mkdir -p storage/framework/{views,cache,sessions} bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
 
-# Jalankan composer install setelah direktori ada
+# Jalankan composer install setelah folder siap
 RUN composer install --no-dev --optimize-autoloader
 
 # Bersihkan cache Laravel
@@ -34,5 +35,6 @@ RUN php artisan config:clear && \
     php artisan view:clear && \
     php artisan package:discover --ansi
 
+# Expose port dan jalankan Laravel
 EXPOSE 8080
 CMD php artisan serve --host=0.0.0.0 --port=8080
