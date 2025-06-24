@@ -18,18 +18,22 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /app
 
-# Salin seluruh project
+# Copy seluruh project ke dalam image
 COPY . .
 
-# Buat folder storage dan bootstrap/cache + set permission & owner
-RUN mkdir -p storage/framework/{views,cache,sessions} bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+# 🔥 Buat folder storage + bootstrap/cache + set permission & ownership
+RUN mkdir -p \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache && \
+    chown -R www-data:www-data storage bootstrap/cache
 
-# Jalankan composer install setelah folder siap
+# Jalankan composer install setelah direktori siap
 RUN composer install --no-dev --optimize-autoloader
 
-# Bersihkan cache Laravel
+# Laravel cache clear
 RUN php artisan config:clear && \
     php artisan cache:clear && \
     php artisan view:clear && \
