@@ -22,7 +22,7 @@ WORKDIR /app
 COPY . .
 
 # Buat direktori Laravel
-RUN mkdir -p storage/framework/{views,cache,sessions} && \
+RUN mkdir -p storage/framework/{views,cache,sessions} bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
 
 # Install dependency Laravel (tanpa dev)
