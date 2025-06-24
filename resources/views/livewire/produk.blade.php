@@ -8,12 +8,12 @@
                     class="btn {{ $pilihanMenu == 'lihat' ? 'btn-primary' : 'btn-outline-primary' }}">
                     Semua Produk
                 </button>
-                
+
                 <button wire:click="pilihMenu('tambah')"
                     class="btn {{ $pilihanMenu == 'tambah' ? 'btn-primary' : 'btn-outline-primary' }}">
                     Tambah Produk
                 </button>
-                 <button wire:click="pilihMenu('excel')"
+                <button wire:click="pilihMenu('excel')"
                     class="btn {{ $pilihanMenu == 'excel' ? 'btn-primary' : 'btn-outline-primary' }}">
                     Import Produk
                 </button>
@@ -141,33 +141,30 @@
                         </div>
                         <div class="card-body">
                             Anda yakin menghapus Produk ini ?
-                            <br/>
+                            <br />
                             <p>Kode : {{ $produkTerpilih->kode }}</p>
                             <p>Nama : {{ $produkTerpilih->nama }}</p>
                             <button class="btn btn-danger" wire:click='hapus'>HAPUS</button>
                             <button class="btn btn-secondary" wire:click='batal'>BATAL</button>
                         </div>
                     </div>
-                    @elseif ($pilihanMenu == 'excel')
+                @elseif ($pilihanMenu == 'excel')
                     <div class="card border-primary">
                         <div class="card-header bg-primary text-white">
                             Import Produk
                         </div>
                         <div class="card-body">
-                            <form wire:submit='ImporExcel'>
+                            {{-- Form upload file Excel --}}
+                            <form wire:submit='ImporExcel' enctype="multipart/form-data">
+                                @csrf
                                 <input type="file" class="form-control" wire:model='fileExcel'>
-                                <br/>
+                                @error('fileExcel')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <br />
                                 <button class="btn btn-primary" type="submit">KIRIM</button>
                             </form>
-            
                         </div>
                     </div>
                 @endif
-            </div>
-        </div>
-    </div>
-
-
-
-
-</div>
+  </div>
