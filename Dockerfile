@@ -18,15 +18,15 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /app
 
-# Copy project files first
+# Salin seluruh project
 COPY . .
 
-# Buat direktori dan permission untuk Laravel cache
-RUN mkdir -p storage/framework/{views,cache,sessions} bootstrap/cache && \
-    chmod -R 775 storage bootstrap/cache
+# 🔥 FIX UTAMA: Buat folder storage dan bootstrap
+RUN mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-# ✅ Jalankan Composer install setelah semua direktori Laravel siap
-RUN composer install --no-dev --optimize-autoloader || composer install --ignore-platform-reqs
+# Jalankan composer install setelah direktori ada
+RUN composer install --no-dev --optimize-autoloader
 
 # Bersihkan cache Laravel
 RUN php artisan config:clear && \
@@ -34,6 +34,5 @@ RUN php artisan config:clear && \
     php artisan view:clear && \
     php artisan package:discover --ansi
 
-# Expose port dan jalankan Laravel server
 EXPOSE 8080
 CMD php artisan serve --host=0.0.0.0 --port=8080
