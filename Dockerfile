@@ -21,10 +21,12 @@ WORKDIR /app
 # Copy seluruh project ke dalam image
 COPY . .
 
-RUN chmod -R 775 database && chmod 664 database/database.sqlite
+# ✅ Permission untuk database + ownership
+RUN chmod -R 775 database && \
+    chmod 664 database/database.sqlite && \
+    chown -R www-data:www-data database
 
-
-# 🔥 Buat folder storage + bootstrap/cache + set permission & ownership
+# ✅ Folder storage dan cache Laravel
 RUN mkdir -p \
     storage/framework/cache \
     storage/framework/sessions \
@@ -33,7 +35,7 @@ RUN mkdir -p \
     chmod -R 775 storage bootstrap/cache && \
     chown -R www-data:www-data storage bootstrap/cache
 
-# Jalankan composer install setelah direktori siap
+# Install dependency
 RUN composer install --no-dev --optimize-autoloader
 
 # Laravel cache clear
@@ -42,6 +44,5 @@ RUN php artisan config:clear && \
     php artisan view:clear && \
     php artisan package:discover --ansi
 
-# Expose port dan jalankan Laravel
 EXPOSE 8080
 CMD php artisan serve --host=0.0.0.0 --port=8080
