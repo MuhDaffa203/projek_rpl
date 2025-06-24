@@ -21,6 +21,9 @@ WORKDIR /app
 # Copy seluruh project ke dalam image
 COPY . .
 
+RUN chmod -R 775 database && chmod 664 database/database.sqlite
+
+
 # 🔥 Buat folder storage + bootstrap/cache + set permission & ownership
 RUN mkdir -p \
     storage/framework/cache \
