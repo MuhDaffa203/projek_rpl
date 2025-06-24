@@ -1,6 +1,6 @@
 FROM php:8.2-cli
 
-# Install dependency OS + SQLite dev
+# Install dependency OS + PHP extension dev headers
 RUN apt-get update && apt-get install -y \
     unzip \
     git \
@@ -8,8 +8,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     libzip-dev \
     libsqlite3-dev \
+    libpng-dev \
     pkg-config \
-    && docker-php-ext-install zip pdo pdo_sqlite
+    && docker-php-ext-install zip pdo pdo_sqlite gd
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
