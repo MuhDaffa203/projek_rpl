@@ -38,11 +38,17 @@ RUN mkdir -p \
 # Install dependency
 RUN composer install --no-dev --optimize-autoloader
 
+# Ganti user ke www-data sebelum menjalankan Artisan
+USER www-data
+
 # Laravel cache clear
 RUN php artisan config:clear && \
     php artisan cache:clear && \
     php artisan view:clear && \
     php artisan package:discover --ansi
+
+# Kembali ke root user (jika dibutuhkan untuk perintah selanjutnya)
+USER root
 
 EXPOSE 8080
 CMD php -S 0.0.0.0:8080 -t public
