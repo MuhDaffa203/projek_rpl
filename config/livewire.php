@@ -63,11 +63,11 @@ return [
     |
     */
 
-    'temporary_file_upload' => [
-    'disk' => null,
-    'rules' => null,
-    'directory' => null,
-    'middleware' => ['web'], 
+  'temporary_file_upload' => [
+    'disk' => 'local', // atau 'public' jika kamu pakai public
+    'rules' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:10240'], // 10 MB
+    'directory' => 'livewire-tmp',
+    'middleware' => ['web'], // wajib
     'preview_mimes' => [
         'png', 'gif', 'bmp', 'svg', 'wav', 'mp4',
         'mov', 'avi', 'wmv', 'mp3', 'm4a',
@@ -76,6 +76,8 @@ return [
     'max_upload_time' => 5,
     'cleanup' => true,
 ],
+
+
 
 
     /*
