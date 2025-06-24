@@ -21,12 +21,13 @@ WORKDIR /app
 # Salin seluruh project
 COPY . .
 
-# Buat direktori Laravel
+# Buat direktori dan set permission SEBELUM composer install
 RUN mkdir -p storage/framework/{views,cache,sessions} bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
 
-# Install dependency Laravel (tanpa dev)
+# Jalankan composer install SETELAH storage dibuat
 RUN composer install --no-dev --optimize-autoloader
+
 
 # Bersihkan cache Laravel
 RUN php artisan config:clear && \
