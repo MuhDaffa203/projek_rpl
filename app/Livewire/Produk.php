@@ -21,10 +21,17 @@ class Produk extends Component
     public $fileExcel;
 
    
-    public function ImporExcel(){
-        Excel::import(new ImporProduk, $this->fileExcel);
-        $this->reset();
-    }
+    public function ImporExcel()
+{
+    $this->validate([
+        'fileExcel' => 'required|file|mimes:xlsx,xls,csv|max:10240', // max:10MB
+    ]);
+
+    Excel::import(new ImporProduk, $this->fileExcel);
+    $this->reset('fileExcel');
+    session()->flash('message', 'Produk berhasil diimpor!');
+}
+
         
 
     public function pilihEdit($id)
