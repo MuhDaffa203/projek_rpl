@@ -7,6 +7,16 @@ use App\Livewire\Laporan;
 use App\Livewire\Transaksi;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\File;
+
+Route::get('/log', function () {
+    $logPath = storage_path('logs/laravel.log');
+    if (!File::exists($logPath)) {
+        return 'Log file not found.';
+    }
+    return '<pre>' . File::get($logPath) . '</pre>';
+});
+
 
 Route::get('/', function () {
     return redirect()->route('login');
